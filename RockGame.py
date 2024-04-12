@@ -14,8 +14,8 @@ font = pygame.font.Font("assets/comic.ttf", 36)
 
 # Get the screen resolution
 screen_info = pygame.display.Info()
-screen_width = screen_info.current_w
-screen_height = screen_info.current_h
+screen_width = 1920
+screen_height = 1080
 
 # Set up the screen in fullscreen mode
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
@@ -31,6 +31,7 @@ game_start = False
 cpu_first = False
 human_first = False
 
+# evaltualtion function
 def evaluate(rock_pile):
     if rock_pile % 2 == 0:
         return 2
@@ -137,9 +138,11 @@ def alpha_beta(rock_pile, is_maximizing, depth, alpha, beta):
                 break
         return min_evaluation
 
+# function for determining terminal game state
 def is_terminal(rock_pile):
     return rock_pile <= 0
 
+# button class for button functionality
 class Button:
     def __init__(self, image_path, position, size):
         self.position = position
@@ -749,8 +752,8 @@ while running:
                                     input_text = 50
                                     return int(input_text)
                                     screen.fill((236, 200, 123), input_rect)
-                                if input_text >= 75:
-                                    input_text = 75
+                                if input_text >= 70:
+                                    input_text = 70
                                     return int(input_text)
                                     screen.fill((236, 200, 123), input_rect)
                                 else:
@@ -825,8 +828,6 @@ while running:
 
     # update screen
     pygame.display.flip()
-
-
 
 # end pygame
 pygame.quit()
