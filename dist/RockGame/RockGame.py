@@ -31,14 +31,14 @@ game_start = False
 cpu_first = False
 human_first = False
 
-# evaltualtion function
+# rockpile evaltualtion function
 def evaluate(rock_pile):
     if rock_pile % 2 == 0:
         return 2
     else:
         return -2
 
-# FOR MINIMAX
+# minimax function for the perfect move selection
 def perfect_ai_move_MM(rock_pile, cpu_first):
     is_maximizing = cpu_first
     if is_maximizing:
@@ -67,7 +67,7 @@ def perfect_ai_move_MM(rock_pile, cpu_first):
             if (rock_pile - best_move) % 2 == 0:
                 return best_move
 
-# MINIMAX ALGORITHM
+# minimax algorythm function
 def minimax(rock_pile, is_maximizing, depth):
     if is_terminal(rock_pile) or depth == 0:
         return evaluate(rock_pile)
@@ -85,8 +85,7 @@ def minimax(rock_pile, is_maximizing, depth):
             min_evaluation = min(min_evaluation, evaluation)
         return min_evaluation
 
-
-# FOR ALPHA-BETA
+# alpha beta function for the perfect move selection
 def perfect_ai_move_AB(rock_pile, cpu_first):
     is_maximizing = cpu_first
     alpha = float('-inf')
@@ -114,7 +113,7 @@ def perfect_ai_move_AB(rock_pile, cpu_first):
             if (rock_pile - best_move) % 2 == 0:
                 return best_move
    
-# ALPHA-BETA ALGORITHM
+# alpha beta algorythm function
 def alpha_beta(rock_pile, is_maximizing, depth, alpha, beta):
     if is_terminal(rock_pile) or depth == 0:
         return evaluate(rock_pile)
@@ -336,8 +335,8 @@ while running:
             if event.key == pygame.K_r:
                 reset = True
 
+    # game reset (all used variables reset to their initial values)
     if reset:
-        # Reset game state here (initialize or set variables to initial values)
         player_move = 0
         cpu_move = 0
         player_points = 0
@@ -355,12 +354,13 @@ while running:
 
     #mouse_pos = pygame.mouse.get_pos()
 
-    # clear screen
+    # clear screen (white color)
     screen.fill((255, 255, 255))
 
     # load second image
     screen.blit(image_2, (image_2_x, image_2_y))
 
+    # handle exit button logic
     if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
             if button_13.rect.collidepoint(event.pos):
@@ -395,6 +395,7 @@ while running:
             button_6.clicked = False
             button_5.clicked = False
 
+    # handle the algorythm selection button logic
     if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
             if button_9.is_clicked(event.pos):
@@ -402,7 +403,7 @@ while running:
             elif button_10.is_clicked(event.pos):
                 cpu_algorythm = alpha_beta
 
-    # draw the buttons
+    # draw all of the clickable buttons
     if event.type == pygame.MOUSEBUTTONDOWN:
         if game_start:
             if event.button == 1: # Left mouse button
@@ -586,6 +587,7 @@ while running:
                 player_points += rock_pile - evaluate(rock_pile)
                 rock_pile = 0
                 game_start = False
+
         # ai move
         if cpu_turn and not pause and game_start:
             if cpu_algorythm == minimax:
@@ -689,6 +691,7 @@ while running:
         text_x = screen_width
         current_text_index = (current_text_index + 1) % len(scrolling_text)
 
+    # get the rectangles around info text
     text1_rect = text1.get_rect()
     text2_rect = text2.get_rect()
     text3_rect = text3.get_rect()
@@ -706,11 +709,13 @@ while running:
     # position the cpuPoints text on the screen
     text4_rect.topleft = (screen_width - 600, screen_height - 180)
 
+    # draw the info text
     screen.blit(text1, text1_rect)
     screen.blit(text2, text2_rect)
     screen.blit(text3, text3_rect)
     screen.blit(text4, text4_rect)
 
+    # logic for determining the current rockpile state picture
     if not rock_pile == None and rock_pile >= 40:
         screen.blit(image_1, (image_1_x, image_1_y))
     if not rock_pile == None and rock_pile <= 40 and rock_pile > 30:
@@ -748,6 +753,7 @@ while running:
                         if active:
                             if event.key == pygame.K_RETURN:
                                 input_text = int(input_text)
+                                # user input defaults to closest allowed value if invalid input
                                 if input_text <= 50:
                                     input_text = 50
                                     return int(input_text)
@@ -759,10 +765,12 @@ while running:
                                 else:
                                     return int(input_text)
                                     screen.fill((236, 200, 123), input_rect)
+                            # making sure user is inputting numbers only
                             if event.unicode.isdigit() and len(input_text) <= max_length:
                                 input_text = input_text + event.unicode
                                 screen.fill((236, 200, 123), input_rect)
                                 draw_text(input_text, font, (0, 0, 0), input_rect.x + 50, input_rect.y + 25)
+                            # backspace logic
                             if event.key == pygame.K_BACKSPACE:
                                 input_text = input_text[:-1]
                                 screen.fill((236, 200, 123), input_rect)
@@ -798,12 +806,24 @@ while running:
     text5 = font.render(f"Humanity lives on!", True, (0, 0, 0))
     text6 = font.render(f"Skynet is coming!", True, (0, 0, 0))
     text7 = font.render(f"Tie!", True, (0, 0, 0))
+    text9 = font.render(f"Now choose", True, (0, 0, 0))
+    text10 = font.render(f"the ai algorythm", True, (0, 0, 0))
+    text11 = font.render(f"Now choose", True, (0, 0, 0))
+    text12 = font.render(f"who goes first", True, (0, 0, 0))
+    text13 = font.render(f"Now pick", True, (0, 0, 0))
+    text14 = font.render(f"your move :3", True, (0, 0, 0))
 
     # get the rectangle around the text surface
     text_rockpile_rect = text_rockpile.get_rect()
     text5_rect = text5.get_rect()
     text6_rect = text6.get_rect()
     text7_rect = text7.get_rect()
+    text9_rect = text9.get_rect()
+    text10_rect = text10.get_rect()
+    text11_rect = text11.get_rect()
+    text12_rect = text12.get_rect()
+    text13_rect = text11.get_rect()
+    text14_rect = text12.get_rect()
 
     # center the rockPile text on the screen
     text_rockpile_rect.center = (screen_width // 2, screen_height - 400)
@@ -816,6 +836,25 @@ while running:
 
     # position the Tie! text on the screen
     text7_rect.topleft = (screen_width - 800, screen_height - 600)
+
+    # position the tutorial text
+    text9_rect.topleft = (screen_width - 1400, screen_height - 650)
+    text10_rect.topleft = (screen_width - 1450, screen_height - 600)
+    text11_rect.topleft = (screen_width - 1400, screen_height - 650)
+    text12_rect.topleft = (screen_width - 1425, screen_height - 600)
+    text13_rect.topleft = (screen_width - 1400, screen_height - 650)
+    text14_rect.topleft = (screen_width - 1425, screen_height - 600)
+
+    # draw the tutorial text
+    if not rock_pile == None and cpu_algorythm == None and not (human_first or cpu_first) and game_start == False:
+        screen.blit(text9, text9_rect)
+        screen.blit(text10, text10_rect)
+    if not rock_pile == None and (cpu_algorythm == minimax or cpu_algorythm == alpha_beta) and game_start == False and not (human_first or cpu_first):
+        screen.blit(text11, text11_rect)
+        screen.blit(text12, text12_rect)
+    if not rock_pile == None and (cpu_algorythm == minimax or cpu_algorythm == alpha_beta) and game_start == True and (human_first or cpu_first):
+        screen.blit(text13, text13_rect)
+        screen.blit(text14, text14_rect)
 
     # draw the scrolling text surface onto the screen
     screen.blit(text8, (text_x, text_y))
